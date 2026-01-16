@@ -79,6 +79,7 @@ import org.schemaspy.output.html.mustache.diagrams.MustacheSummaryDiagramFactory
 import org.schemaspy.output.html.mustache.diagrams.MustacheSummaryDiagramResults;
 import org.schemaspy.output.html.mustache.diagrams.MustacheTableDiagramFactory;
 import org.schemaspy.output.html.mustache.diagrams.OrphanDiagram;
+import org.schemaspy.output.markdown.MermaidMarkdownProducer;
 import org.schemaspy.progress.ConditionalProgress;
 import org.schemaspy.progress.IfUpdateAfter;
 import org.schemaspy.util.DataTableConfig;
@@ -336,6 +337,23 @@ public class SchemaAnalyzer {
                 LOGGER.warn("Failed to produce output", oe);
             } else {
                 throw oe;
+            }
+        }
+
+        // Generate Markdown documentation with Mermaid diagrams
+        if (commandLineArguments.isMarkdownEnabled()) {
+            try {
+                MermaidMarkdownProducer markdownProducer = new MermaidMarkdownProducer(
+                    commandLineArguments.withOrphans(),
+                    commandLineArguments.withImpliedRelationships()
+                );
+                markdownProducer.generate(db, tables, outputDir);
+            } catch (OutputException oe) {
+                if (isOneOfMultipleSchemas) {
+                    LOGGER.warn("Failed to produce Markdown output", oe);
+                } else {
+                    throw oe;
+                }
             }
         }
 

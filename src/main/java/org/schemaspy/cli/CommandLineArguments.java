@@ -231,6 +231,15 @@ public class CommandLineArguments {
 
     @Parameter(
         names = {
+            "-markdown", "--markdown",
+            "schemaspy.markdown"
+        },
+        descriptionKey = "markdown"
+    )
+    private boolean markdown = false;
+
+    @Parameter(
+        names = {
             "-degree",
             "schemaspy.degree"
         },
@@ -567,6 +576,10 @@ public class CommandLineArguments {
 
     public boolean useVizJS() {
         return useVizJS;
+    }
+
+    public boolean isMarkdownEnabled() {
+        return markdown;
     }
 
     public int getDegreeOfSeparation() {

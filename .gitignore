@@ -14,3 +14,7 @@ ext-lib/**/*.jar
 .java-version
 .sdkmanrc
 .DS_Store
+
+# E2E test output
+e2e/*/output/
+e2e/sqlite/testdb.sqlite

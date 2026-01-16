@@ -3,3 +3,6 @@
 !docker/schemaspy.sh
 !target/schema*.jar
 !target/checkout/target/schema*.jar
+# For Dockerfile.build (build from source)
+!pom.xml
+!src/

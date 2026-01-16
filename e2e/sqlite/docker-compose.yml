@@ -1,0 +1,18 @@
+services:
+  schemaspy:
+    image: ghcr.io/sean-sunagaku/schemaspy-add-mermaid-markdown-output:latest
+    volumes:
+      - ./output:/output
+      - ./testdb.sqlite:/db/testdb.sqlite:ro
+    command:
+      - "-t"
+      - "sqlite-xerial"
+      - "-db"
+      - "/db/testdb.sqlite"
+      - "-u"
+      - "sqlite"
+      - "-s"
+      - "testdb"
+      - "-cat"
+      - "testdb"
+      - "-markdown"

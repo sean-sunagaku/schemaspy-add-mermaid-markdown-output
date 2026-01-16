@@ -234,3 +234,80 @@ Diagram related
     Use embedded viz.js instead of Graphviz. Useful when graphviz isn't installed. Memory is set to 64 MB, if you receive ther error "Cannot enlarge memory arrays" please report this to us.
 [-degree 1 or 2]
     Limit the degree of separation (1 shows less, 2 is default), 1 is a good option for large databases with lots of relationships.
+
+Markdown output
+~~~~~~~~~~~~~~~
+[-markdown]
+    Generate schema documentation as a Markdown file with Mermaid ER diagrams.
+    The output file ``schema.md`` will be created in the output directory.
+    This format is useful for version control, GitHub/GitLab wikis, and documentation that renders Mermaid diagrams natively.
+
+    **Usage example:**
+
+    .. code-block:: bash
+
+        java -jar schemaspy.jar -t mysql -host localhost -db mydb -u user -p pass -o output -markdown
+
+    **Output file structure:**
+
+    The generated ``schema.md`` file contains the following sections:
+
+    1. **Overview** - Database metadata (name, schema, tables count, generation date)
+    2. **Entity Relationship Diagram** - Mermaid ER diagram with all tables and relationships
+    3. **Table Details** - Detailed information for each table (columns, types, keys, indexes)
+    4. **Foreign Key Constraints** - List of all foreign key relationships
+
+    **Sample output:**
+
+    .. code-block:: markdown
+
+        # Database Schema: mydb
+
+        ## Overview
+
+        | Property | Value |
+        |----------|-------|
+        | Database Name | mydb |
+        | Tables | 5 |
+        | Views | 0 |
+
+        ## Entity Relationship Diagram
+
+        ```mermaid
+        erDiagram
+            users {
+                int id PK
+                varchar name
+                varchar email UK
+            }
+            posts {
+                int id PK
+                int user_id FK
+                varchar title
+                text content
+            }
+            users ||--o{ posts : "FK"
+        ```
+
+        ## Table Details
+
+        ### users
+
+        | Column | Type | Size | Nullable | Key | Default | Comment |
+        |--------|------|------|----------|-----|---------|---------|
+        | id | int | 11 | NO | PK | - | User ID |
+        | name | varchar | 100 | NO | - | - | User name |
+        | email | varchar | 200 | YES | UK | - | Email address |
+
+        ## Foreign Key Constraints
+
+        | Constraint | Child Table | Child Column(s) | Parent Table | Parent Column(s) | On Delete |
+        |------------|-------------|-----------------|--------------|------------------|-----------|
+        | fk_posts_users | posts | user_id | users | id | Restrict delete |
+
+    **Notes:**
+
+    - The Mermaid diagram is rendered natively in GitHub, GitLab, VS Code, and many other platforms
+    - Can be combined with ``-nohtml`` to generate only Markdown output
+    - Foreign key relationships are shown with ``||--o{`` notation (one-to-many)
+    - Primary keys are marked with ``PK``, foreign keys with ``FK``, and unique keys with ``UK``
